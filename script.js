@@ -1,39 +1,60 @@
 let resources = JSON.parse(localStorage.getItem("resources")) || [];
 
-function upload(){
+function uploadResource(){
 
 let title = document.getElementById("title").value;
 let file = document.getElementById("file").files[0];
 
+if(!file){
+alert("Please select a file");
+return;
+}
+
+let reader = new FileReader();
+
+reader.onload = function(e){
+
 let resource = {
-title:title,
-fileName:file.name
+title: title || file.name,
+fileData: e.target.result,
+fileName: file.name
 };
 
 resources.push(resource);
 
-localStorage.setItem("resources",JSON.stringify(resources));
+localStorage.setItem("resources", JSON.stringify(resources));
 
-alert("Resource uploaded successfully");
+alert("File uploaded successfully!");
+
+}
+
+reader.readAsDataURL(file);
 
 }
 
 function loadResources(){
 
-let list=document.getElementById("resources");
+let list = document.getElementById("resourceList");
 
-resources.forEach(r=>{
+if(!list) return;
 
-let li=document.createElement("li");
+list.innerHTML="";
 
-li.innerHTML=r.title+" - "+r.fileName;
+resources.forEach((res,index)=>{
 
-list.appendChild(li);
+let item = document.createElement("div");
+
+item.innerHTML = `
+<p>${res.title} - ${res.fileName}</p>
+<a href="${res.fileData}" download="${res.fileName}">
+<button>Download</button>
+</a>
+`;
+
+list.appendChild(item);
 
 });
 
 }
 
-if(document.getElementById("resources")){
 loadResources();
-}
