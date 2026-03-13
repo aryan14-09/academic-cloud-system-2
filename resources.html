@@ -20,21 +20,45 @@ let resources = JSON.parse(localStorage.getItem("resources")) || [];
 
 let container = document.getElementById("list");
 
-resources.forEach(res=>{
+function loadResources(){
+
+container.innerHTML="";
+
+resources.forEach((res,index)=>{
 
 let div = document.createElement("div");
 
 div.innerHTML = `
 <p>${res.title}</p>
+
 <a href="${res.url}" target="_blank">
 <button>Download</button>
 </a>
+
+<button onclick="deleteFile(${index})" style="background:red">
+Delete
+</button>
+
 <hr>
 `;
 
 container.appendChild(div);
 
 });
+
+}
+
+function deleteFile(index){
+
+resources.splice(index,1);
+
+localStorage.setItem("resources",JSON.stringify(resources));
+
+loadResources();
+
+}
+
+loadResources();
 
 </script>
 
