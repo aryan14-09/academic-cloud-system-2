@@ -2,19 +2,64 @@
 <html>
 <head>
 <title>Upload Resource</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <h2>Upload Study Material</h2>
 
-<input type="text" id="title" placeholder="Resource Title"><br><br>
+<input type="file" id="file">
 
-<input type="file" id="file"><br><br>
+<br><br>
 
-<button onclick="upload()">Upload</button>
+<button onclick="uploadFile()">Upload</button>
 
-<script src="script.js"></script>
+<br><br>
+
+<a href="index.html">⬅ Back</a>
+
+<script>
+
+const cloudName = "dngezkwy3";
+const uploadPreset = "iau9qnfg";
+
+function uploadFile(){
+
+let file = document.getElementById("file").files[0];
+
+if(!file){
+alert("Please select file");
+return;
+}
+
+let formData = new FormData();
+formData.append("file", file);
+formData.append("upload_preset", uploadPreset);
+
+fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,{
+method:"POST",
+body:formData
+})
+.then(res=>res.json())
+.then(data=>{
+
+let resources = JSON.parse(localStorage.getItem("resources")) || [];
+
+resources.push({
+title:file.name,
+url:data.secure_url
+});
+
+localStorage.setItem("resources",JSON.stringify(resources));
+
+alert("File uploaded to Cloud ☁");
+
+});
+
+}
+
+</script>
 
 </body>
 </html>
