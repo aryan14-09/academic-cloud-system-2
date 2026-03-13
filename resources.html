@@ -2,19 +2,41 @@
 <html>
 <head>
 <title>Resources</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <h2>Available Resources</h2>
 
-<div id="resourceList"></div>
+<div id="list"></div>
 
-<br><br>
+<br>
+<a href="index.html">⬅ Back</a>
 
-<a href="index.html">⬅ Back to Home</a>
+<script>
 
-<script src="script.js"></script>
+let resources = JSON.parse(localStorage.getItem("resources")) || [];
+
+let container = document.getElementById("list");
+
+resources.forEach(res=>{
+
+let div = document.createElement("div");
+
+div.innerHTML = `
+<p>${res.title}</p>
+<a href="${res.url}" target="_blank">
+<button>Download</button>
+</a>
+<hr>
+`;
+
+container.appendChild(div);
+
+});
+
+</script>
 
 </body>
 </html>
